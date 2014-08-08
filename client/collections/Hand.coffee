@@ -6,6 +6,11 @@ class window.Hand extends Backbone.Collection
 
   hit: ->
     @add(@deck.pop()).last()
+    #if score > 21, then stand (because he got so busted)
+
+  stand: ->
+    # trigger stand event which will finish the player's turn
+    @trigger 'stand'
 
   scores: ->
     # The scores are an array of potential scores.
