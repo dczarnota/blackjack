@@ -23,3 +23,10 @@ class window.Hand extends Backbone.Collection
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
     if hasAce then [score, score + 10] else [score]
+
+  revealHand: ->
+    #iterate thru each card
+    @forEach (card) ->
+      if !card.get 'revealed' then card.flip()
+      #check if current card is revealed
+      #if not, then reveal it
