@@ -13,8 +13,16 @@ class window.App extends Backbone.Model
       else
         @set 'gameResult', "You lost big time."
     ), this
+
     @set 'gameResult', ""
 
+    @get("playerHand").on "bust",((collection) ->
+      @set 'gameResult', "You lost big time."
+    ), @
+
+    @get("dealerHand").on "bust",((collection) ->
+      @set 'gameResult', "You won, pat yourself on the back!"
+    ), @
 
   challenge: ->
     @get('dealerHand').revealHand()
@@ -24,10 +32,8 @@ class window.App extends Backbone.Model
 
     dealerScore = @get("dealerHand").getValid()
 
-    if dealerScore isnt -1
-      if dealerScore >= @get("playerHand").getValid()
-        @set 'gameResult', "You lost big time."
-      else
-        @set 'gameResult', "You won, pat yourself on the back!"
+    if dealerScore >= @get("playerHand").getValid()
+      @set 'gameResult', "You lost big time."
     else
       @set 'gameResult', "You won, pat yourself on the back!"
+

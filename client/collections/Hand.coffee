@@ -4,9 +4,17 @@ class window.Hand extends Backbone.Collection
 
   initialize: (array, @deck, @isDealer) ->
 
+  isPlayable: true
+
   hit: ->
+    if !@isPlayable
+      return
+
     @add(@deck.pop()).last()
     #if score > 21, then stand (because he got so busted)
+    if @getValid() is -1
+      @trigger 'bust'
+      @isPlayable = false
 
   stand: ->
     # trigger stand event which will finish the player's turn
