@@ -30,3 +30,15 @@ class window.Hand extends Backbone.Collection
       if !card.get 'revealed' then card.flip()
       #check if current card is revealed
       #if not, then reveal it
+
+  getValid: ->
+    #get the highest legal score possible, if there is none return -1
+    score = -1
+
+    if(@scores()[0] <= 21)
+      score = @scores()[0]
+    if(@scores()[1] and @scores()[1] <= 21)
+      if(@scores()[1] > score)
+        score = @scores()[1]
+
+    return score

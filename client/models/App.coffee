@@ -7,17 +7,27 @@ class window.App extends Backbone.Model
     @set 'dealerHand', deck.dealDealer()
     #set listener on player hand so we can deal with stands
     @get("playerHand").on "stand",((collection) ->
-      @challenge()
+      playerScore = @get("playerHand").getValid()
+      if playerScore isnt -1
+        @challenge()
+      else
+        @set 'gameResult', "You lost big time."
     ), this
+    @set 'gameResult', ""
+
 
   challenge: ->
-    #flip all cards in dealer's hand
     @get('dealerHand').revealHand()
-    #while dealer's current score < 17, then hit()
-    playerScore = @get('playerHand').scores()
 
-    while @get('dealerHand').scores()[0] < 17 and (@get('dealerHand').scores()[1] < 17 or true)
-      @get('dealerHand').hit();
+    while @get("dealerHand").getValid() < 17 and @get("dealerHand").getValid() isnt -1
+      @get("dealerHand").hit()
 
+    dealerScore = @get("dealerHand").getValid()
 
-    if @get('dealerHand').scores()[0] <= 21 and (@get('dealerHand').scores()[1] < 17 or true) then console.log "You're lost! You're bad at life." else console.log "you win"
+    if dealerScore isnt -1
+      if dealerScore >= @get("playerHand").getValid()
+        @set 'gameResult', "You lost big time."
+      else
+        @set 'gameResult', "You won, pat yourself on the back!"
+    else
+      @set 'gameResult', "You won, pat yourself on the back!"
