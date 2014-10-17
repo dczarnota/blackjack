@@ -4,6 +4,7 @@ class window.AppView extends Backbone.View
     <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
+    <div><h1><%= gameResult %></h1></div>
   '
 
   events:
@@ -12,9 +13,12 @@ class window.AppView extends Backbone.View
 
   initialize: ->
     @render()
-
+    @model.on "change:gameResult", ((model) ->
+      @render()
+      return
+    ),this
   render: ->
     @$el.children().detach()
-    @$el.html @template()
+    @$el.html @template(@model.attributes)
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
